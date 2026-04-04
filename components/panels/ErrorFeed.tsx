@@ -11,6 +11,7 @@ export function ErrorFeed() {
   });
 
   // Filter for workflows with error status
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const errors = data?.workflows
     ?.filter((wf: any) => wf.lastStatus === "error")
     ?.map((wf: any) => ({
@@ -28,6 +29,7 @@ export function ErrorFeed() {
         <p className="text-xs" style={{ color: "var(--text-muted)" }}>No recent errors</p>
       )}
       <div className="max-h-48 overflow-y-auto space-y-2">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         {errors.map((err: any, i: number) => (
           <div
             key={i}

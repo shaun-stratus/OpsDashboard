@@ -29,6 +29,7 @@ export async function GET() {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = workflows.map((wf: any) => {
       const lastExec = latestExecution[wf.id];
       let health: "green" | "yellow" | "red" = "yellow";
