@@ -3,7 +3,7 @@
 ## Vercel env push (run when Phase 2 ships)
 
 ```bash
-cd /Users/shaunlennert/VSCode/projects/OpsDashboard
+cd /Users/shaunlennert/Ops/projects/OpsDashboard
 vercel env add SUPABASE_MANAGEMENT_PAT production
 vercel env add OPENAI_ADMIN_KEY production
 vercel env add ANTHROPIC_ADMIN_KEY production
