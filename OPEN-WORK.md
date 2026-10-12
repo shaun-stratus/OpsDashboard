@@ -1,0 +1,25 @@
+---
+project: OpsDashboard
+lane: ops-dash
+template: v2
+kind: project
+state: paused
+health: red
+last_session: s303 (2026-10-12)
+---
+Where it stands: ⏸ PAUSED since 2026-09-24 (it was public with no auth). The build status card stays `docs/STATUS.md` (Phase 1 shipped: 4 API routes, 5 panels). This folder now also holds every parked dashboard / telemetry idea (moved from `tasks.queue.md` Cluster 6 + one loose end, s303) so the "one-screen view" question is decided in one place. **First question at any restart:** the task-corpus Artifact dashboard (s153) and Claude Dashboards now cover much of the need, so restart cost (Access + keys + broken routes) must justify itself against them (#1).
+
+## Next up
+1. #1 Decide the dashboard direction — restart this app, or a stable-URL Artifact / Claude Dashboard / the Acer screens instead (#2, #3) — Shaun's call, scoping session first
+2. #4 Command Centre slice — first check whether CodeBurn already covers the continuous-`/insights` metrics
+
+## Work table
+
+| # | Item | Size | Status / next step | Detail |
+|---|---|---|---|---|
+| 1 | Ops Dashboard Phase 2+ (Tier 2/3/4) — restart or not | 🏔 | Parked. Restart recipe: (1) Cloudflare Access in front FIRST (proxy the DNS record + an Access app, the n8n email-OTP pattern) · (2) re-add `SUPABASE_SERVICE_ROLE_KEY` + `N8N_API_KEY` to Vercel from BWS · (3) unpause (`POST /v1/projects/prj_QXbwCmSoyHdHhTVEqS6Gb96feUEl/unpause`, REST — the MCP connector is read-only) · (4) fix the broken supabase/n8n/mcp routes. Phase 2 = work visibility (tasks, phase progress, git, session timeline, upcoming triggers, portfolio snapshot); Phase 3 = intelligence (embedding growth, velocity, workflow history, platform spend — #5); Phase 4 = experimental. Was at `https://ops.stratus-holdings.com`. | specs `docs/superpowers/specs/2026-04-03-ops-dashboard-design.md` + `…/2026-04-16-ops-dashboard-phase-2-design.md` · `docs/deployment.md` · access paths ch.22 |
+| 2 | 📊 Live-data dashboard at a stable Artifact URL | ◐ | Direction set (s144), scope NOT defined — scoping pass first. System state (health audit · drift census · instruction-load floor) as a self-updating page at a durable private URL instead of terminal snapshots. Data exists: `SysRef/state/health-trend.jsonl` + `drift-trend.jsonl` + `instruction-load-trend.jsonl`. Questions: which datasets · republish-on-audit vs a live capability · Shaun-only vs collaborator · relationship to the task-corpus dashboard, Claude Dashboards, #1, #3, #4, and Tighten Arc #8 (the navigable view). | `SysRef/procedures/task-dashboard-procedure.md` · CAPABILITIES Artifacts + Dashboards rows |
+| 3 | 📺 System-health dashboard on the Acer screens | 🏔 | Shaun s298: an always-on visual cue for which part of the system needs attention most (doc limits, reaching-outside-working-memory count, board, reservoir, health, Hypnos, usage, infra, projects). Two open decisions: Artifact vs a LAN page; overlap with the TLD tune-up. Project folders shipped, so the Projects panel is unblocked. | `docs/drafts/2026-10-11-system-health-dashboard.md` |
+| 4 | Command Centre — local CC-observability slice | ◐ | Pre-decided slicing (06-05): STEAL the observability core (JSONL + Claude Code's native OpenTelemetry → MCP per-tool p95, cache-hit rate, session outcomes, tool latency, edit acceptance — a continuous `/insights`); SKIP the Mission Control dispatcher (a second task system) and the Telegram bridge. OTel ruling: adopt for native emitters only, not a universal bus. Next: check whether CodeBurn (trial s299) already covers the continuous-`/insights` slice; if yes, drop or shrink to the gaps. Unpark: Shaun calls the dashboard discussion, after that check. | `docs/research-results/2026-06-05-command-centre-dashboard-prompt-THIRD-PARTY.md` · Graphite recon `docs/research-results/2026-06-06-graphite-metrics-recon.md` |
+| 5 | Ops telemetry lanes (Phase 3) | 🏔 | Platform/vendor telemetry, distinct from the audit's own `health-trend.jsonl`: Supabase platform health depth (disk I/O, sizes, latency p50/p95, log errors) · API balance / credit / usage vs tier limits (partial: `SysRef/state/credit-balances-ledger.md`; an API-balance morning-prep poll is planned) · un-inventoried surfaces (n8n success deltas, tunnel uptime, Worker invocations, Actions minutes, Tailscale, AgentMail volume, brew/npm outdated, gitleaks runs). Trigger: 3+ sessions in a row where Shaun had to check N surfaces to answer X — and a live render surface (#1/#2). | — |
+| 6 | Dependency Lifecycle Console (DLC) — a thin read-only view | ◐ | Re-scoped 06-09: NOT a cadence engine (morning-prep + the health audit already poll). A view over the running cadences mapping APIs / tokens / SDKs / models → what depends on each, so blast radius is known up front ("model X deprecates in 30 d → migration arc"). Open: dependency-map storage (Supabase vs a `SysRef/registries/` markdown file) · presentation (a panel on #1/#2). Promote on bandwidth or a dependency incident. | `docs/research-results/2026-06-07-recurring-checks-dossier-reconciliation.md` §5 |
