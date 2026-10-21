@@ -5,7 +5,7 @@ template: v2
 kind: project
 state: paused
 health: red
-last_session: s303 (2026-10-12)
+last_session: s326 (2026-10-21)
 ---
 Where it stands: ⏸ PAUSED since 2026-09-24 (it was public with no auth). Build status below (§ Build status; the old `docs/STATUS.md` card was folded in s326). This folder now also holds every parked dashboard / telemetry idea (moved from `tasks.queue.md` Cluster 6 + one loose end, s303) so the "one-screen view" question is decided in one place. **First question at any restart:** the task-corpus Artifact dashboard (s153) and Claude Dashboards now cover much of the need, so restart cost (Access + keys + broken routes) must justify itself against them (#1).
 
