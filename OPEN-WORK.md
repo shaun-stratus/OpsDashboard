@@ -7,11 +7,18 @@ state: paused
 health: red
 last_session: s303 (2026-10-12)
 ---
-Where it stands: ⏸ PAUSED since 2026-09-24 (it was public with no auth). The build status card stays `docs/STATUS.md` (Phase 1 shipped: 4 API routes, 5 panels). This folder now also holds every parked dashboard / telemetry idea (moved from `tasks.queue.md` Cluster 6 + one loose end, s303) so the "one-screen view" question is decided in one place. **First question at any restart:** the task-corpus Artifact dashboard (s153) and Claude Dashboards now cover much of the need, so restart cost (Access + keys + broken routes) must justify itself against them (#1).
+Where it stands: ⏸ PAUSED since 2026-09-24 (it was public with no auth). Build status below (§ Build status; the old `docs/STATUS.md` card was folded in s326). This folder now also holds every parked dashboard / telemetry idea (moved from `tasks.queue.md` Cluster 6 + one loose end, s303) so the "one-screen view" question is decided in one place. **First question at any restart:** the task-corpus Artifact dashboard (s153) and Claude Dashboards now cover much of the need, so restart cost (Access + keys + broken routes) must justify itself against them (#1).
 
 ## Next up
 1. #1 Decide the dashboard direction — restart this app, or a stable-URL Artifact / Claude Dashboard / the Acer screens instead (#2, #3) — Shaun's call, scoping session first
 2. #4 Command Centre slice — first check whether CodeBurn already covers the continuous-`/insights` metrics
+
+## Build status (folded from `docs/STATUS.md`, s326)
+
+- **Stack:** Next.js 14 + React 18 + Tailwind + Recharts + SWR on Vercel (project `ops-dashboard`). Phase 1 (4 API routes, 5 panels) shipped 2026-04-04; no tests.
+- **Paused 2026-09-24:** it was public at `ops.stratus-holdings.com` with no auth (never behind Cloudflare Access). Vercel project paused (site → 503); `SUPABASE_SERVICE_ROLE_KEY` + `N8N_API_KEY` removed from Vercel (canonical copies in Bitwarden SM).
+- **Known issues:** no auth in front (High — must be fixed before unpausing) · supabase / n8n / mcp routes erroring when last live (502s + "Unregistered API key").
+- **Restart recipe:** work table #1. Poor cloud-session fit: every data source is private.
 
 ## Work table
 
