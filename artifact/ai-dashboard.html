@@ -1,0 +1,199 @@
+<title>AI Resources Board</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a header strip, then four status tiles — one column on a phone (most urgent first), 2×2 from 900px. */
+:root {
+  --bg: #f4f5f7; --card: #ffffff; --line: #e1e4ea; --fg: #161a22; --muted: #5d6573;
+  --ok: #1f8a4c; --watch: #b7791f; --act: #c53030; --nodata: #b7791f; --accent: #3d5af1;
+  --display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1115; --card: #181b22; --line: #262b36; --fg: #eef0f3; --muted: #8f97a5;
+  --ok: #3fb950; --watch: #e3a33b; --act: #f2645b; --nodata: #e3a33b; --accent: #7d93ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1115; --card: #181b22; --line: #262b36; --fg: #eef0f3; --muted: #8f97a5;
+  --ok: #3fb950; --watch: #e3a33b; --act: #f2645b; --nodata: #e3a33b; --accent: #7d93ff; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.45 var(--display);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 18px 32px; }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; }
+h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+.gen { color: var(--muted); font: 13px var(--mono); }
+.gen.stale { color: var(--watch); font-weight: 600; }
+.notice { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; }
+.notice p { margin: 0; max-width: 62ch; }
+button { font: 600 14px var(--display); color: #fff; background: var(--accent); border: 0; border-radius: 8px;
+  padding: 9px 14px; cursor: pointer; justify-self: start; }
+button:focus-visible, .tile:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px 14px;
+  display: grid; gap: 6px; min-width: 0; cursor: pointer; position: relative; overflow: hidden; }
+.tile::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--muted); }
+.tile.ok::before { background: var(--ok); } .tile.watch::before { background: var(--watch); }
+.tile.act::before { background: var(--act); } .tile.nodata::before { background: var(--nodata); }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.name { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 600 12px var(--mono); text-transform: uppercase; letter-spacing: 0.04em; }
+.pill::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.ok .pill { color: var(--ok); } .watch .pill { color: var(--watch); } .act .pill { color: var(--act); } .nodata .pill { color: var(--nodata); }
+.headline { font-size: 19px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.asof { color: var(--muted); font: 12px var(--mono); }
+.stale .asof { color: var(--watch); font-weight: 600; }
+.rows { list-style: none; margin: 6px 0 0; padding: 0; display: grid; }
+.rows[hidden] { display: none; }
+.rows li { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.rows li span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.rows .v { text-align: right; font: 13px var(--mono); color: var(--muted); overflow-wrap: anywhere; min-width: 0; }
+.rows li.watch .v { color: var(--watch); } .rows li.act .v { color: var(--act); }
+.more { color: var(--muted); font-size: 12px; }
+@media (prefers-reduced-motion: no-preference) { .tile { transition: border-color .15s; } .tile:hover { border-color: var(--muted); } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>AI resources</h1>
+    <span class="gen" id="gen">waiting for data</span>
+  </header>
+  <div class="notice" id="notice" hidden>
+    <p id="notice-text"></p>
+    <button type="button" id="notice-btn" hidden></button>
+  </div>
+  <div class="grid" id="grid">
+    <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Usage + credits</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
+    <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Retirements</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
+    <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">System health</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
+    <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Claude Code sessions</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
+  </div>
+</div>
+
+<script>
+const SERVER = "Notion";
+const TOOL = "notion-fetch";
+const PAGE_ID = "40597b97-f8be-81b3-b901-d319cb8983ad";
+const WORDS = { ok: "OK", watch: "Watch", act: "Act", nodata: "No data" };
+const RANK = { act: 3, watch: 2, nodata: 1, ok: 0 };
+const open = new Set();
+let payload = null;
+
+const $ = (id) => document.getElementById(id);
+
+function ago(ts) {
+  const t = Date.parse(ts);
+  if (!ts || isNaN(t)) return "never";
+  const m = Math.round((Date.now() - t) / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return m + " min ago";
+  const h = Math.floor(m / 60);
+  return h + " h " + (m % 60) + " min ago";
+}
+const stale = (ts) => !ts || isNaN(Date.parse(ts)) || Date.now() - Date.parse(ts) > 2 * 3600 * 1000;
+
+function el(tag, cls, text) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+function render() {
+  if (!payload) return;
+  const gen = $("gen");
+  gen.textContent = "updated " + ago(payload.generated_at);
+  gen.classList.toggle("stale", stale(payload.generated_at));
+  const phone = window.matchMedia("(max-width: 899px)").matches;
+  const panels = [...payload.panels];
+  if (phone) panels.sort((a, b) => (RANK[b.status] || 0) - (RANK[a.status] || 0));
+  const grid = $("grid");
+  grid.replaceChildren();
+  for (const p of panels) {
+    const tile = el("section", "tile " + p.status + (stale(p.as_of) ? " stale" : ""));
+    tile.tabIndex = 0;
+    const top = el("div", "top");
+    top.append(el("span", "name", p.title), el("span", "pill", WORDS[p.status] || p.status));
+    tile.append(top, el("div", "headline", p.headline), el("div", "asof", "updated " + ago(p.as_of)));
+    if (p.rows && p.rows.length) {
+      const ul = el("ul", "rows");
+      ul.hidden = !open.has(p.id);
+      for (const r of p.rows) {
+        const li = el("li", r.status);
+        li.append(el("span", null, r.label), el("span", "v", r.value));
+        ul.append(li);
+      }
+      tile.append(ul, el("span", "more", open.has(p.id) ? "Tap to hide details" : "Tap for " + p.rows.length + " details"));
+      tile.setAttribute("aria-expanded", String(open.has(p.id)));
+      const toggle = () => { open.has(p.id) ? open.delete(p.id) : open.add(p.id); render(); };
+      tile.addEventListener("click", toggle);
+      tile.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+    }
+    grid.append(tile);
+  }
+}
+
+function showNotice(text, btnLabel, onClick) {
+  $("notice-text").textContent = text;
+  const b = $("notice-btn");
+  b.hidden = !btnLabel;
+  if (btnLabel) { b.textContent = btnLabel; b.onclick = onClick; }
+  $("notice").hidden = false;
+}
+const hideNotice = () => { $("notice").hidden = true; };
+
+function parse(result) {
+  const p = result && result.payload;
+  const text = typeof p === "string" ? p : (p && typeof p.text === "string" ? p.text : JSON.stringify(p || ""));
+  const m = text.match(/```json\s*([\s\S]*?)```/);
+  if (!m) throw new Error("no data block");
+  const data = JSON.parse(m[1].trim());
+  if (!data || !Array.isArray(data.panels)) throw new Error("bad data block");
+  return data;
+}
+
+async function askAgain(mcp) {
+  try {
+    const result = await mcp.callTool(SERVER, TOOL, { id: PAGE_ID });
+    payload = parse(result); hideNotice(); render();
+  } catch (e) { handleError(e, mcp); }
+}
+
+function handleError(err, mcp) {
+  const code = err && err.code;
+  if (code === "server_not_connected" || code === "selection_required") {
+    payload = null;
+    showNotice("Add Notion in claude.ai Settings → Connectors to see the dashboard.");
+  } else if (code === "needs_reauth") {
+    payload = null;
+    showNotice("Reconnect Notion in claude.ai Settings → Connectors to see the dashboard.");
+  } else if (code === "not_in_manifest" || code === "approval_required" || code === "consent_required" || code === "blocked_by_policy") {
+    payload = null;
+    showNotice("Allow Notion to see the dashboard. This page only reads one private Notion page with the latest numbers.",
+      "Allow Notion", () => askAgain(mcp));
+  } else if (payload) {
+    showNotice("Couldn't refresh from Notion just now. Showing the last numbers; it will try again in 10 minutes.");
+  } else {
+    showNotice("Couldn't read the dashboard data from Notion. It will try again in 10 minutes.", "Try now", () => askAgain(mcp));
+  }
+}
+
+(async () => {
+  const mcp = await claude.use("mcp");
+  if (!mcp) {
+    showNotice("This view can't reach Notion. Open the page on claude.ai, signed in, to see the dashboard.");
+    return;
+  }
+  mcp.watchTool(SERVER, TOOL, { id: PAGE_ID }, (ev) => {
+    if (ev.type === "data") {
+      try { payload = parse(ev.result); hideNotice(); render(); }
+      catch (e) { showNotice("The Notion page didn't hold readable dashboard data. The next hourly update should fix it."); }
+    } else {
+      handleError(ev.error, mcp);
+    }
+  }, { refetchInterval: 600000 });
+  setInterval(render, 60000);
+  window.matchMedia("(max-width: 899px)").addEventListener("change", render);
+})();
+</script>
