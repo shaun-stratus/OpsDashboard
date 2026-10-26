@@ -102,7 +102,7 @@ function el(tag, cls, text) {
 }
 
 function render() {
-  if (!payload) return;
+  if (!payload) { $("grid").replaceChildren(); return; }
   const gen = $("gen");
   gen.textContent = "updated " + ago(payload.generated_at);
   gen.classList.toggle("stale", stale(payload.generated_at));
@@ -147,7 +147,11 @@ const hideNotice = () => { $("notice").hidden = true; };
 
 function parse(result) {
   const p = result && result.payload;
-  const text = typeof p === "string" ? p : (p && typeof p.text === "string" ? p.text : JSON.stringify(p || ""));
+  const blocks = result && Array.isArray(result.content) ? result.content : (p && Array.isArray(p.content) ? p.content : null);
+  let text = blocks ? blocks.map((b) => (b && typeof b.text === "string" ? b.text : "")).join("\n")
+    : typeof p === "string" ? p : (p && typeof p.text === "string" ? p.text : "");
+  // The Notion connector may wrap its result as JSON ({"title", "text": "<page markdown>", …}); unwrap it first.
+  try { const o = JSON.parse(text); if (o && typeof o.text === "string") text = o.text; } catch (e) {}
   const m = text.match(/```json\s*([\s\S]*?)```/);
   if (!m) throw new Error("no data block");
   const data = JSON.parse(m[1].trim());
@@ -165,15 +169,19 @@ async function askAgain(mcp) {
 function handleError(err, mcp) {
   const code = err && err.code;
   if (code === "server_not_connected" || code === "selection_required") {
-    payload = null;
+    payload = null; render();
     showNotice("Add Notion in claude.ai Settings → Connectors to see the dashboard.");
   } else if (code === "needs_reauth") {
-    payload = null;
+    payload = null; render();
     showNotice("Reconnect Notion in claude.ai Settings → Connectors to see the dashboard.");
   } else if (code === "not_in_manifest" || code === "approval_required" || code === "consent_required" || code === "blocked_by_policy") {
-    payload = null;
+    payload = null; render();
     showNotice("Allow Notion to see the dashboard. This page only reads one private Notion page with the latest numbers.",
       "Allow Notion", () => askAgain(mcp));
+  } else if (code === "not_granted" || code === "capability_disabled" || code === "capability_removed") {
+    payload = null;
+    render();
+    showNotice("This page can't reach Notion from here. Open it on claude.ai, signed in, to see the dashboard.");
   } else if (payload) {
     showNotice("Couldn't refresh from Notion just now. Showing the last numbers; it will try again in 10 minutes.");
   } else {
