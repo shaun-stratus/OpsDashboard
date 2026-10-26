@@ -92,6 +92,17 @@ function ago(ts) {
   const h = Math.floor(m / 60);
   return h + " h " + (m % 60) + " min ago";
 }
+// "Mon 3:38 PM (24 min ago)"; adds the date when it isn't today, so a stuck feed is obvious.
+function stamp(ts) {
+  const t = Date.parse(ts);
+  if (!ts || isNaN(t)) return "never";
+  const d = new Date(t), now = new Date();
+  const time = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  const day = d.toDateString() === now.toDateString()
+    ? d.toLocaleDateString([], { weekday: "short" })
+    : d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+  return day + " " + time + " (" + ago(ts) + ")";
+}
 const stale = (ts) => !ts || isNaN(Date.parse(ts)) || Date.now() - Date.parse(ts) > 2 * 3600 * 1000;
 
 function el(tag, cls, text) {
@@ -104,7 +115,7 @@ function el(tag, cls, text) {
 function render() {
   if (!payload) { $("grid").replaceChildren(); return; }
   const gen = $("gen");
-  gen.textContent = "updated " + ago(payload.generated_at);
+  gen.textContent = "updated " + stamp(payload.generated_at);
   gen.classList.toggle("stale", stale(payload.generated_at));
   const phone = window.matchMedia("(max-width: 899px)").matches;
   const panels = [...payload.panels];
@@ -117,7 +128,7 @@ function render() {
     const top = el("div", "top");
     const old = stale(p.as_of) && p.status !== "nodata";
     top.append(el("span", "name", p.title), el("span", "pill", old ? "Stale" : (WORDS[p.status] || p.status)));
-    tile.append(top, el("div", "headline", p.headline), el("div", "asof", "updated " + ago(p.as_of)));
+    tile.append(top, el("div", "headline", p.headline), el("div", "asof", "updated " + stamp(p.as_of)));
     if (p.rows && p.rows.length) {
       const ul = el("ul", "rows");
       ul.hidden = !open.has(p.id);
