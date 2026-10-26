@@ -10,7 +10,7 @@ last_session: s338 (2026-10-25)
 Where it stands: ⏸ PAUSED since 2026-09-24 (it was public with no auth). Build status below (§ Build status; the old `docs/STATUS.md` card was folded in s326). This folder now also holds every parked dashboard / telemetry idea (moved from `tasks.queue.md` Cluster 6 + one loose end, s303) so the "one-screen view" question is decided in one place. **First question at any restart:** the task-corpus Artifact dashboard (s153) and Claude Dashboards now cover much of the need, so restart cost (Access + keys + broken routes) must justify itself against them (#1).
 
 ## Next up
-1. #1 ✅ DECIDED s339: AI-resources view = private Artifact page, also shown on an Acer screen (DECISIONS 2026-10-26); old Vercel app retired → next: pick the first panels, then build
+1. #1 ✅ BUILT s339 (2026-10-26): the **AI resources board** — private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr (phone) + the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`), data via the Notion page "AI dashboard data" (Reference → Subscriptions & Credits). Next: Shaun opens it on the phone and allows Notion once · decide whether the usage tile should read Claude's usage endpoint (needs the Claude sign-in token) · **delete the old Vercel `ops-dashboard` project (Shaun's call)**
 2. #4 Command Centre slice — first check whether CodeBurn already covers the continuous-`/insights` metrics
 
 ## Build status (folded from `docs/STATUS.md`, s326)
