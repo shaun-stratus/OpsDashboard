@@ -3,7 +3,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: a header strip, then four status tiles — one column on a phone (most urgent first), 2×2 from 900px. */
+/* Layout: a header strip, a one-line "Needs you" banner, then five status tiles — one column on a phone (most urgent first),
+   2+2+1 from 900px (the fifth, Infra, spans both columns and lists its rows in two). */
 :root {
   --bg: #f4f5f7; --card: #ffffff; --line: #e1e4ea; --fg: #161a22; --muted: #5d6573;
   --ok: #1f8a4c; --watch: #b7791f; --act: #c53030; --nodata: #b7791f; --accent: #3d5af1;
@@ -25,12 +26,17 @@ h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; text
 .gen { color: var(--muted); font: 13px var(--mono); }
 .gen.stale { color: var(--watch); font-weight: 600; }
 .notice { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; }
+.notice[hidden] { display: none; }  /* display:grid above would otherwise win over [hidden] and show an empty card */
 .notice p { margin: 0; max-width: 62ch; }
 button { font: 600 14px var(--display); color: #fff; background: var(--accent); border: 0; border-radius: 8px;
   padding: 9px 14px; cursor: pointer; justify-self: start; }
 button:focus-visible, .tile:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .tile:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .tile:last-child:nth-child(odd) .rows { grid-template-columns: 1fr 1fr; column-gap: 28px; }
+}
 .tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px 14px;
   display: grid; gap: 6px; min-width: 0; cursor: pointer; position: relative; overflow: hidden; }
 .tile::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--muted); }
@@ -48,10 +54,20 @@ button:focus-visible, .tile:focus-visible { outline: 3px solid var(--accent); ou
 .rows { list-style: none; margin: 6px 0 0; padding: 0; display: grid; }
 .rows[hidden] { display: none; }
 .rows li { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
-.rows li span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.rows li span:first-child { min-width: min-content; overflow-wrap: break-word; }  /* never split a label mid-word; the value wraps instead */
 .rows .v { text-align: right; font: 13px var(--mono); color: var(--muted); overflow-wrap: anywhere; min-width: 0; }
 .rows li.watch .v { color: var(--watch); } .rows li.act .v { color: var(--act); }
 .more { color: var(--muted); font-size: 12px; }
+/* The banner always occupies its line (two on a phone), so the data arriving never shifts the tiles below it. */
+.banner { display: block; width: 100%; text-align: left; font: 600 15px/1.35 var(--display); color: var(--fg); background: var(--card);
+  border: 1px solid var(--line); border-radius: 12px; padding: 11px 16px 11px 21px; min-height: 3.6em; position: relative; overflow: hidden;
+  display: flex; align-items: center; cursor: default; overflow-wrap: anywhere; }
+.banner::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--muted); }
+.banner.ok::before { background: var(--ok); } .banner.watch::before { background: var(--watch); }
+.banner.act::before { background: var(--act); } .banner.nodata::before { background: var(--nodata); }
+.banner.ok { color: var(--ok); } .banner.act { color: var(--act); } .banner.watch, .banner.nodata { color: var(--watch); }
+.banner.go { cursor: pointer; }
+@media (min-width: 600px) { .banner { min-height: 2.6em; } }
 @media (prefers-reduced-motion: no-preference) { .tile { transition: border-color .15s; } .tile:hover { border-color: var(--muted); } }
 </style>
 
@@ -64,11 +80,13 @@ button:focus-visible, .tile:focus-visible { outline: 3px solid var(--accent); ou
     <p id="notice-text"></p>
     <button type="button" id="notice-btn" hidden></button>
   </div>
+  <button type="button" class="banner nodata" id="banner" aria-live="polite">Checking the board…</button>
   <div class="grid" id="grid">
     <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Usage + credits</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
     <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Retirements</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
     <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">System health</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
     <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Claude Code sessions</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
+    <section class="tile nodata" tabindex="0" aria-expanded="false"><div class="top"><span class="name">Infra</span><span class="pill">Loading</span></div><div class="headline">Reading the latest numbers from Notion…</div></section>
   </div>
 </div>
 
@@ -78,6 +96,7 @@ const TOOL = "notion-fetch";
 const PAGE_ID = "40597b97-f8be-81b3-b901-d319cb8983ad";
 const WORDS = { ok: "OK", watch: "Watch", act: "Act", nodata: "No data" };
 const RANK = { act: 3, watch: 2, nodata: 1, ok: 0 };
+const BANNER_OK = "\u2705 Nothing needs you";
 const open = new Set();
 let payload = null;
 
@@ -112,7 +131,34 @@ function el(tag, cls, text) {
   return n;
 }
 
+// "Needs you" line, derived from panels[].status + rows[].status (the payload has no banner keys). Worst status first
+// (nodata ranks below watch), then board order. Mirrors publish.banner() in scripts/ai_dashboard/publish.py for the kiosk.
+function needsYou(data) {
+  const c = [];
+  (data.panels || []).forEach((p, i) => {
+    const bad = (p.rows || []).map((r, j) => ({ r, j })).filter((x) => x.r.status !== "ok");
+    if (bad.length) bad.forEach((x) => c.push({ sev: RANK[x.r.status] || 1, i, j: x.j, id: p.id, title: p.title, label: x.r.label }));
+    else if (p.status !== "ok") c.push({ sev: RANK[p.status] || 1, i, j: -1, id: p.id, title: p.title, label: p.status === "nodata" ? "no data" : p.headline });
+    else if (stale(p.as_of)) c.push({ sev: 2, i, j: -1, id: p.id, title: p.title, label: "data is stale" });
+  });
+  if (!c.length) return { cls: "ok", text: BANNER_OK, id: null };
+  c.sort((a, b) => b.sev - a.sev || a.i - b.i || a.j - b.j);
+  const top = c[0];
+  return { cls: top.sev === 3 ? "act" : top.sev === 2 ? "watch" : "nodata",
+    text: "\u26a0 Needs you: " + top.title + " \u2014 " + top.label + (c.length > 1 ? " (+" + (c.length - 1) + " more)" : ""), id: top.id };
+}
+
+function renderBanner() {
+  const b = $("banner");
+  const n = payload ? needsYou(payload) : { cls: "nodata", text: "Waiting for the board data\u2026", id: null };
+  b.className = "banner " + n.cls + (n.id ? " go" : "");
+  b.textContent = n.text;
+  b.tabIndex = n.id ? 0 : -1;
+  b.onclick = n.id ? () => { open.add(n.id); render(); const t = document.querySelector('[data-id="' + n.id + '"]'); if (t) { t.scrollIntoView({ behavior: "smooth", block: "start" }); t.focus({ preventScroll: true }); } } : null;
+}
+
 function render() {
+  renderBanner();
   if (!payload) { $("grid").replaceChildren(); return; }
   const gen = $("gen");
   gen.textContent = "updated " + stamp(payload.generated_at);
@@ -125,6 +171,7 @@ function render() {
   for (const p of panels) {
     const tile = el("section", "tile " + p.status + (stale(p.as_of) ? " stale" : ""));
     tile.tabIndex = 0;
+    tile.dataset.id = p.id;
     const top = el("div", "top");
     const old = stale(p.as_of) && p.status !== "nodata";
     top.append(el("span", "name", p.title), el("span", "pill", old ? "Stale" : (WORDS[p.status] || p.status)));
