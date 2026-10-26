@@ -10,8 +10,7 @@ last_session: s343 (2026-10-26)
 Where it stands: **LIVE — the AI resources board** (built s339, fixed + refined s343): private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr, pinned in Shaun's claude.ai sidebar (phone), plus the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`) → Notion page "AI dashboard data" → the page. Four tiles: usage + credits · retirements · system health · Claude Code sessions. **Shaun's KPI ideas / tweaks land in `NOTES.md` § Board ideas (KPI wishlist)** — the one place. The old Next.js app (`ops.stratus-holdings.com`) was **retired 2026-10-26 (s343)**: Vercel project deleted, DNS record removed, code kept in this repo; its build status + old restart recipe stay below as history.
 
 ## Next up
-0. **First: the Dependabot backlog** (SecurityCredentials LOOSE-ENDS) — includes removing this repo's retired Next.js app files (Shaun OK'd s343; keep `artifact/` + the four project files)
-1. **Board build batch ① — Infra tile (C1 + C5 jobs + C6 n8n + tunnel) + the "needs you" banner (C2)** — then batches ②–⑤ in NOTES § Board ideas (carry-over walk done s343)
+1. **Board build batch ① — Infra tile (C1 + C5 jobs + C6 n8n + tunnel) + the "needs you" banner (C2)** — **fire-ready, waits on Shaun's mark** (s344): brief `docs/superpowers/plans/2026-10-26-ai-board-batch1-infra-banner.md` (Ops repo), queue row § Background Candidates · then batches ②–⑤ in NOTES § Board ideas (carry-over walk done s343). _(Dependabot backlog + Next.js code removal done s344, `c9899ee`.)_
 2. Usage tile: read Claude's usage endpoint? (needs the Claude sign-in token)
 3. #4 Command Centre slice — first check whether CodeBurn already covers the continuous-`/insights` metrics
 
