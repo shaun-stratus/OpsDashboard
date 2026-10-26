@@ -44,6 +44,7 @@ button:focus-visible, .tile:focus-visible { outline: 3px solid var(--accent); ou
 .headline { font-size: 19px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
 .asof { color: var(--muted); font: 12px var(--mono); }
 .stale .asof { color: var(--watch); font-weight: 600; }
+.tile.stale::before { background: var(--watch); } .tile.stale .pill { color: var(--watch); }
 .rows { list-style: none; margin: 6px 0 0; padding: 0; display: grid; }
 .rows[hidden] { display: none; }
 .rows li { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
@@ -114,7 +115,8 @@ function render() {
     const tile = el("section", "tile " + p.status + (stale(p.as_of) ? " stale" : ""));
     tile.tabIndex = 0;
     const top = el("div", "top");
-    top.append(el("span", "name", p.title), el("span", "pill", WORDS[p.status] || p.status));
+    const old = stale(p.as_of) && p.status !== "nodata";
+    top.append(el("span", "name", p.title), el("span", "pill", old ? "Stale" : (WORDS[p.status] || p.status)));
     tile.append(top, el("div", "headline", p.headline), el("div", "asof", "updated " + ago(p.as_of)));
     if (p.rows && p.rows.length) {
       const ul = el("ul", "rows");
