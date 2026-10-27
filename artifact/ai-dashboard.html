@@ -134,18 +134,17 @@ function el(tag, cls, text) {
 // "Needs you" line, derived from panels[].status + rows[].status (the payload has no banner keys). Worst status first
 // (nodata ranks below watch), then board order. Mirrors publish.banner() in scripts/ai_dashboard/publish.py for the kiosk.
 function needsYou(data) {
+  // Only "act" counts (Shaun s344): watch / no data / stale stay on their tiles. Same rules as publish.banner().
   const c = [];
   (data.panels || []).forEach((p, i) => {
-    const bad = (p.rows || []).map((r, j) => ({ r, j })).filter((x) => x.r.status !== "ok");
-    if (bad.length) bad.forEach((x) => c.push({ sev: RANK[x.r.status] || 1, i, j: x.j, id: p.id, title: p.title, label: x.r.label }));
-    else if (p.status !== "ok") c.push({ sev: RANK[p.status] || 1, i, j: -1, id: p.id, title: p.title, label: p.status === "nodata" ? "no data" : p.headline });
-    else if (stale(p.as_of)) c.push({ sev: 2, i, j: -1, id: p.id, title: p.title, label: "data is stale" });
+    const rows = p.rows || [];
+    if (rows.length) rows.forEach((r, j) => { if (r.status === "act") c.push({ i, j, id: p.id, title: p.title, label: r.label }); });
+    else if (p.status === "act") c.push({ i, j: -1, id: p.id, title: p.title, label: p.headline });
   });
   if (!c.length) return { cls: "ok", text: BANNER_OK, id: null };
-  c.sort((a, b) => b.sev - a.sev || a.i - b.i || a.j - b.j);
+  c.sort((a, b) => a.i - b.i || a.j - b.j);
   const top = c[0];
-  return { cls: top.sev === 3 ? "act" : top.sev === 2 ? "watch" : "nodata",
-    text: "\u26a0 Needs you: " + top.title + " \u2014 " + top.label + (c.length > 1 ? " (+" + (c.length - 1) + " more)" : ""), id: top.id };
+  return { cls: "act", text: "\u26a0 Needs you: " + top.title + " \u2014 " + top.label + (c.length > 1 ? " (+" + (c.length - 1) + " more)" : ""), id: top.id };
 }
 
 function renderBanner() {
