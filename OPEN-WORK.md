@@ -5,7 +5,7 @@ template: v2
 kind: project
 state: active
 health: green
-last_session: s343 (2026-10-26)
+last_session: s344 (2026-10-27)
 ---
 Where it stands: **LIVE — the AI resources board** (built s339, fixed + refined s343): private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr, pinned in Shaun's claude.ai sidebar (phone), plus the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`) → Notion page "AI dashboard data" → the page. Four tiles: usage + credits · retirements · system health · Claude Code sessions. **Shaun's KPI ideas / tweaks land in `NOTES.md` § Board ideas (KPI wishlist)** — the one place. The old Next.js app (`ops.stratus-holdings.com`) was **retired 2026-10-26 (s343)**: Vercel project deleted, DNS record removed, code kept in this repo; its build status + old restart recipe stay below as history.
 
