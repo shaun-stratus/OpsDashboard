@@ -1,10 +1,13 @@
 ---
 project: OpsDashboard
 lane: ops-dash
-template: v2
+template: v3
 kind: project
-state: active
+state: warm
+revisit: 2026-12-08
 health: green
+plugin: none
+walked: s426 (2026-11-17)
 last_session: s420 (2026-11-16)
 ---
 Where it stands: **LIVE — the AI resources board** (built s339, fixed + refined s343): private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr, pinned in Shaun's claude.ai sidebar (phone), plus the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`) → Notion page "AI dashboard data" → the page. Four tiles: usage + credits · retirements · system health · Claude Code sessions. **Shaun's KPI ideas / tweaks land in `NOTES.md` § Board ideas (KPI wishlist)** — the one place. The old Next.js app (`ops.stratus-holdings.com`) was **retired 2026-10-26 (s343)**: Vercel project deleted, DNS record removed, code kept in this repo; its build status + old restart recipe stay below as history. **s347 (10-28):** the Acer kiosk copy now opens a tile on click (all rows, closes on click / Esc / 90 s); the three Acer wall displays restart nightly at 04:47 (`scripts/acer-wallboards/`).
@@ -13,6 +16,11 @@ Where it stands: **LIVE — the AI resources board** (built s339, fixed + refine
 0. **Notion Dashboard (s363):** spec approved s369 → next: CC writes the build plan (superpowers:writing-plans), then Shaun marks it to build → `docs/superpowers/specs/2026-11-01-notion-dashboard-design.md`
 1. Usage tile: read Claude's usage endpoint? (needs the Claude sign-in token)
 2. #4 Command Centre slice — first check whether CodeBurn already covers the continuous-`/insights` metrics
+
+## Recently done
+- Walked onto template v3; Active → Warm, revisit 2026-12-08: write the Notion Dashboard plan or drop it (s426)
+- Evidence check: row 7 closed — board batch ① shipped s344 (s420)
+- Notion Dashboard spec approved; build plan next (s369)
 
 ## Build status (folded from `docs/STATUS.md`, s326)
 
