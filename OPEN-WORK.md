@@ -12,6 +12,14 @@ last_session: s444 (2026-11-21)
 ---
 Where it stands: **LIVE — the AI resources board** (built s339, fixed + refined s343): private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr, pinned in Shaun's claude.ai sidebar (phone), plus the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`) → Notion page "AI dashboard data" → the page. Four tiles: usage + credits · retirements · system health · Claude Code sessions. **Shaun's KPI ideas / tweaks land in `NOTES.md` § Board ideas (KPI wishlist)** — the one place. The old Next.js app (`ops.stratus-holdings.com`) was **retired 2026-10-26 (s343)**: Vercel project deleted, DNS record removed, and the Next.js code deleted s344 (`projects/OpsDashboard/app/` no longer exists); a one-line build history stays below. **s347 (10-28):** the Acer kiosk copy now opens a tile on click (all rows, closes on click / Esc / 90 s); the three Acer wall displays restart nightly at 04:47 (`scripts/acer-wallboards/`).
 
+## Live documents
+Names from `SysRef/registries/document-names.yaml` (s449).
+
+| Job | File | You might call it |
+|---|---|---|
+| work list | `OPEN-WORK.md` (this file) | the work list, next up |
+| map: AI resources board | `artifact/ai-dashboard.html` | the AI resources board, the dashboard |
+
 ## Next up
 0. **Notion Dashboard (s363):** spec approved s369 → next: CC writes the build plan (superpowers:writing-plans), then Shaun marks it to build → `docs/superpowers/specs/2026-11-01-notion-dashboard-design.md`
 1. Usage tile: the tile already reads the status line's rate-limit snapshot + credit ledger (`scripts/ai_dashboard/usage.py`); open only: do we also want server-side reads of Claude's usage endpoint? (needs the Claude sign-in token)
@@ -31,7 +39,7 @@ The Next.js app (Next.js 14 on Vercel, `ops.stratus-holdings.com`; Phase 1 shipp
 
 | # | Item | Size | Status / next step | Detail |
 |---|---|---|---|---|
-| 1 | Ops Dashboard Phase 2+ (Tier 2/3/4) — restart or not | ✅ | **Closed s343: app retired (Vercel project + DNS deleted), `app/` code deleted s344; ideas combed into NOTES § Board ideas.** Restart recipe dropped (nothing left to restart; in git history). | specs `docs/superpowers/specs/2026-04-03-ops-dashboard-design.md` + `…/2026-04-16-ops-dashboard-phase-2-design.md` · access paths ch.22 (its `docs/deployment.md` went with the app, s344) |
+| 1 | Ops Dashboard Phase 2+ (Tier 2/3/4) — restart or not | ✅ | **Closed s343: app retired (Vercel project + DNS deleted), `app/` code deleted s344; ideas combed into NOTES § Board ideas.** Restart recipe dropped (nothing left to restart; in git history). | specs `docs/superpowers/specs/2026-04-03-ops-dashboard-design.md` + `…/2026-04-16-ops-dashboard-phase-2-design.md` · access paths ch.22 (its `docs/deployment.md` (gone) went with the app, s344) |
 | 2 | 📊 Live-data dashboard at a stable Artifact URL | ✅ | **Superseded by the AI resources board (s339/s343)** — `scripts/ai_dashboard/` + `artifact/ai-dashboard.html`, hourly publish; system health, drift, TLD size live at a pinned private URL. | `SysRef/procedures/task-dashboard-procedure.md` · CAPABILITIES Artifacts + Dashboards rows |
 | 3 | 📺 System-health dashboard on the Acer screens | ◐ | **Kiosk shipped (s339/s347: the board runs on the Acer LEFT monitor; Infra tile shipped s344, row 7).** Remaining = the extra panels from the s298 list (projects, reservoir) → candidates in NOTES § Board ideas. Shaun s298: an always-on visual cue for which part of the system needs attention most (doc limits, reaching-outside-working-memory count, board, reservoir, health, Hypnos, usage, infra, projects). Two open decisions: Artifact vs a LAN page; overlap with the TLD tune-up. Project folders shipped, so the Projects panel is unblocked. | `projects/system/ProcessDoctrineHealth/2026-10-11-system-health-dashboard.md` (moved s321) |
 | 4 | Command Centre — local CC-observability slice | ◐ | Pre-decided slicing (06-05): STEAL the observability core (JSONL + Claude Code's native OpenTelemetry → MCP per-tool p95, cache-hit rate, session outcomes, tool latency, edit acceptance — a continuous `/insights`); SKIP the Mission Control dispatcher (a second task system) and the Telegram bridge. OTel ruling: adopt for native emitters only, not a universal bus. Next: check whether CodeBurn (trial s299) already covers the continuous-`/insights` slice; if yes, drop or shrink to the gaps. Unpark: Shaun calls the dashboard discussion, after that check. | `docs/archive/research-results/2026-06-05-command-centre-dashboard-prompt-THIRD-PARTY.md` · Graphite recon `docs/research-results/2026-06-06-graphite-metrics-recon.md` |
