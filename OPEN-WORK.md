@@ -8,7 +8,7 @@ revisit: 2026-12-08
 health: green
 plugin: none
 walked: s426 (2026-11-17)
-last_session: s449 (2026-11-22)
+last_session: s455 (2026-11-23)
 ---
 Where it stands: **LIVE — the AI resources board** (built s339, fixed + refined s343): private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr, pinned in Shaun's claude.ai sidebar (phone), plus the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`) → Notion page "AI dashboard data" → the page. Four tiles: usage + credits · retirements · system health · Claude Code sessions. **Shaun's KPI ideas / tweaks land in `NOTES.md` § Board ideas (KPI wishlist)** — the one place. The old Next.js app (`ops.stratus-holdings.com`) was **retired 2026-10-26 (s343)**: Vercel project deleted, DNS record removed, and the Next.js code deleted s344 (`projects/OpsDashboard/app/` no longer exists); a one-line build history stays below. **s347 (10-28):** the Acer kiosk copy now opens a tile on click (all rows, closes on click / Esc / 90 s); the three Acer wall displays restart nightly at 04:47 (`scripts/acer-wallboards/`).
 
@@ -23,7 +23,7 @@ Names from `SysRef/registries/document-names.yaml` (s449).
 ## Next up
 0. **Notion Dashboard (s363):** spec approved s369 → next: CC writes the build plan (superpowers:writing-plans), then Shaun marks it to build → `docs/superpowers/specs/2026-11-01-notion-dashboard-design.md`
 1. Usage tile: the tile already reads the status line's rate-limit snapshot + credit ledger (`scripts/ai_dashboard/usage.py`); open only: do we also want server-side reads of Claude's usage endpoint? (needs the Claude sign-in token)
-2. #4 Command Centre slice — first check whether CodeBurn already covers the continuous-`/insights` metrics
+2. #4 Command Centre slice — CodeBurn check DONE (Codex x6a, 2026-11-23, `docs/research-results/2026-11-23-codex-batch-2/x6a.md`): it covers tokens/cost/cache-hit/sessions, tool + MCP frequency, retries and one-shot edits (free, MIT, v0.9.28 2026-11-08); it does NOT cover MCP per-tool p95, tool latency, edit acceptance or session outcomes. Next: feed CodeBurn's JSON into the board and build only those gaps (OTel gives tool durations + edit decisions; outcomes need separate analysis)
 
 ## Recently done
 - Row #1 closed: app retired s343, code deleted s344; ideas combed into NOTES § Board ideas (s444 audit; closed s343)
