@@ -6,6 +6,7 @@
 | 2026-06-09 | DLC is a thin read-only view, not a cadence engine | morning-prep + the health audit already own the polling | a DLC cadence engine |
 | 2026-09-24 (s245) | PAUSED — it was public with no auth | Exposure; poor cloud fit (every data source is private) | live at ops.stratus-holdings.com |
 | 2026-10-26 (s343) | **Next.js app RETIRED** — Vercel project `ops-dashboard` deleted (verified 404) and the `ops.stratus-holdings.com` CNAME removed in the same step (a CNAME left pointing at Vercel = subdomain-takeover risk). Code + history stay in the `shaun-stratus/OpsDashboard` repo. | The AI resources board replaced it; every idea worth keeping was combed into NOTES § Board ideas first (Shaun asked for the comb before the delete) | the paused Next.js app |
+| 2026-11-25 (s461) | Shaun, yes to all four leans: (1) Artifact vs LAN page closed — keep the static kiosk page + the artifact, one payload; (2) the attention cue lights on `watch` items, not only `act`; (3) build order: attention line → reservoir rows → Projects tile, the reaching-outside hook last; (4) split the credits poll off #5 as #8, warning when a pool will run out within 7 days. **Nothing built yet: all queued in Next up until Shaun says go.** #5 itself stays parked. | Memos `2026-11-25-attention-cue-memo.md`, `2026-11-25-telemetry-lanes-plan.md`; the pace rule would have caught the Tavily case | the two open #3 decisions |
 
 ## 2026-10-26 (s339) — Dashboard direction: AI-resources view as a private Artifact page, also shown on an Acer screen
 
