@@ -21,14 +21,12 @@ Names from `SysRef/registries/document-names.yaml` (s449).
 | map: AI resources board | `artifact/ai-dashboard.html` | the AI resources board, the dashboard |
 
 ## Next up
-_⏸ Approved builds, queued (Shaun 2026-11-25: "I don't wanna build anything now… have them ready to fire off"). Start one only when Shaun says go; the brief for each is the memo named._
-3. **#3a Attention line** (~½ session): a small rules score over the System health tile's rows; a "Most attention" line + tile highlight; lights on `watch` items, not just `act` → `2026-11-25-attention-cue-memo.md` § 4
-4. **#8 Credits morning poll** (~½ day): Firecrawl, OpenRouter, Tavily (test Tavily's usage endpoint first; fails → stays on the Monday check); log to `SysRef/state/credit-poll.jsonl`; a Sync Up line only when a pool will run out within 7 days at the current pace; fills the Usage tile's balance rows → `2026-11-25-telemetry-lanes-plan.md` § 3 Lane A
-5. **#3b Reservoir rows, then #3c Projects tile** (~1 session together), after #3a → `2026-11-25-attention-cue-memo.md` § 5–6
-
 0. **Notion Dashboard (s363):** spec approved s369 → next: CC writes the build plan (superpowers:writing-plans), then Shaun marks it to build → `docs/superpowers/specs/2026-11-01-notion-dashboard-design.md`
 1. Usage tile: the tile already reads the status line's rate-limit snapshot + credit ledger (`scripts/ai_dashboard/usage.py`); open only: do we also want server-side reads of Claude's usage endpoint? (needs the Claude sign-in token)
 2. #4 Command Centre slice — CodeBurn check DONE (Codex x6a, 2026-11-23, `docs/research-results/2026-11-23-codex-batch-2/x6a.md`): it covers tokens/cost/cache-hit/sessions, tool + MCP frequency, retries and one-shot edits (free, MIT, v0.9.28 2026-11-08); it does NOT cover MCP per-tool p95, tool latency, edit acceptance or session outcomes. Next: feed CodeBurn's JSON into the board and build only those gaps (OTel gives tool durations + edit decisions; outcomes need separate analysis)
+3. **#3a Attention line** — ⏸ approved + queued (Shaun 2026-11-25), start only when he says go (~½ session): a small rules score over the System health tile's rows; a "Most attention" line + tile highlight; lights on `watch` items, not just `act` → `2026-11-25-attention-cue-memo.md` § 4
+4. **#8 Credits morning poll** — ⏸ approved + queued (Shaun 2026-11-25), start only when he says go (~½ day): Firecrawl, OpenRouter, Tavily (test Tavily's usage endpoint first; fails → stays on the Monday check); log to `SysRef/state/credit-poll.jsonl`; a Sync Up line only when a pool will run out within 7 days at the current pace; fills the Usage tile's balance rows → `2026-11-25-telemetry-lanes-plan.md` § 3 Lane A
+5. **#3b Reservoir rows, then #3c Projects tile** — ⏸ approved + queued (Shaun 2026-11-25), start only when he says go (~1 session together), after #3a → `2026-11-25-attention-cue-memo.md` § 5–6
 
 ## Recently done
 - #3 + #5 decisions made (Shaun 2026-11-25, yes to all four leans); builds queued as #3a–#3c and #8, not started (s461)
