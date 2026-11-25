@@ -8,7 +8,7 @@ revisit: 2026-12-08
 health: green
 plugin: none
 walked: s426 (2026-11-17)
-last_session: s461 (2026-11-25)
+last_session: s462 (2026-11-25)
 ---
 Where it stands: **LIVE — the AI resources board** (built s339, fixed + refined s343): private page https://claude.ai/artifact/QRqdycfrDskhw9X4zBtZvr, pinned in Shaun's claude.ai sidebar (phone), plus the Acer LEFT-monitor kiosk; hourly job `scripts/ai_dashboard/` in the Ops repo (LaunchAgent `com.stratus.ai-dashboard`) → Notion page "AI dashboard data" → the page. Four tiles: usage + credits · retirements · system health · Claude Code sessions. **Shaun's KPI ideas / tweaks land in `NOTES.md` § Board ideas (KPI wishlist)** — the one place. The old Next.js app (`ops.stratus-holdings.com`) was **retired 2026-10-26 (s343)**: Vercel project deleted, DNS record removed, and the Next.js code deleted s344 (`projects/OpsDashboard/app/` no longer exists); a one-line build history stays below. **s347 (10-28):** the Acer kiosk copy now opens a tile on click (all rows, closes on click / Esc / 90 s); the three Acer wall displays restart nightly at 04:47 (`scripts/acer-wallboards/`).
 
@@ -19,6 +19,8 @@ Names from `SysRef/registries/document-names.yaml` (s449).
 |---|---|---|
 | work list | `OPEN-WORK.md` (this file) | the work list, next up |
 | map: AI resources board | `artifact/ai-dashboard.html` | the AI resources board, the dashboard |
+| report: attention-cue decision memo | `2026-11-25-attention-cue-memo.md` | the attention cue memo, the dashboard memo |
+| report: telemetry lanes plan | `2026-11-25-telemetry-lanes-plan.md` | the monitoring plan, the credits poll plan |
 
 ## Next up
 0. **Notion Dashboard (s363):** spec approved s369 → next: CC writes the build plan (superpowers:writing-plans), then Shaun marks it to build → `docs/superpowers/specs/2026-11-01-notion-dashboard-design.md`
@@ -29,6 +31,7 @@ Names from `SysRef/registries/document-names.yaml` (s449).
 5. **#3b Reservoir rows, then #3c Projects tile** — ⏸ approved + queued (Shaun 2026-11-25), start only when he says go (~1 session together), after #3a → `2026-11-25-attention-cue-memo.md` § 5–6
 
 ## Recently done
+- Attention-cue memo + telemetry plan; Shaun yes to all four leans; builds queued, not started (s462)
 - #3 + #5 decisions made (Shaun 2026-11-25, yes to all four leans); builds queued as #3a–#3c and #8, not started (s461)
 - Row #1 closed: app retired s343, code deleted s344; ideas combed into NOTES § Board ideas (s444 audit; closed s343)
 - Walked onto template v3; Active → Warm, revisit 2026-12-08: write the Notion Dashboard plan or drop it (s426)
